@@ -29,11 +29,45 @@ The frontend UI is implemented (local state only, no API integration yet):
 
 ## Next Steps
 
-- [ ] Add form validation (required fields, URL format, phone format, character limits)
-- [ ] Implement image upload for banner/logo (with size/dimension validation)
-- [ ] Backend — Agent management Google service + CRUD API routes + DB migration (see [backend-integration-plan.md](docs/backend-integration-plan.md))
-- [ ] Wire frontend to backend API (replace local state with real API calls)
-- [ ] Agent verification & launch flow
+### 1. Backend API Integration (highest priority)
+
+The frontend is currently using local state only. Per [backend-integration-plan.md](docs/backend-integration-plan.md):
+
+- [ ] Extend the Go backend (`backend/rcs/core/google/`) with agent CRUD endpoints using Google's Business Communications API
+- [ ] Wire up the wizard's "Save and Complete" to call `POST /v2/private/rcs/agents` to create an agent
+- [ ] Wire up the agent list page to call `GET /v2/private/rcs/agents` to fetch existing agents
+- [ ] Implement test device management APIs (`POST/DELETE /v2/private/rcs/agents/{id}/testers`)
+- [ ] Implement send test message API (`POST /v2/private/rcs/agents/{id}/test-message`)
+
+### 2. Form Validation
+
+- [ ] Add client-side validation (required fields, URL format, hex color format, phone number format)
+- [ ] Add character limit enforcement with error states
+- [ ] Validate at least one contact method is provided in Step 2
+
+### 3. Image Upload Implementation
+
+- [ ] Banner and logo upload handlers (currently just "Browse" button placeholder)
+- [ ] File type/size validation (banner: 1440×448px, 200kB max; logo: 224×224px, 50kB max)
+- [ ] Preview uploaded images in the phone mockup
+
+### 4. Agent List Enhancement
+
+- [ ] Show real agent data from API (status, brand verification state)
+- [ ] Agent detail/edit view
+- [ ] Delete agent confirmation
+
+### 5. Brand Verification Flow
+
+- [ ] Submit agent for Google verification
+- [ ] Display verification status updates
+- [ ] Handle questionnaire responses
+
+### 6. Feature Flag Cleanup
+
+- [ ] Re-gate the RCS nav item behind `showRcsOnboarding` once Unleash flag is enabled in production
+- [ ] Revert `featureFlagDefaults` to `false` before production commit
+- [ ] Uncomment the feature flag check in `pages/u/channels/rcs/index.tsx`
 
 ---
 
